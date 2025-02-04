@@ -42,4 +42,4 @@ app.use("/api/user", userRoutes);
 app.use("/api/workspaces/:workspaceId/tasks", taskRoutes);
 app.use("/api/workspaces", workspaceRoutes);
 
-app.listen(process.env.PORT);
+app.listen(process.env.PORT || 3000);
