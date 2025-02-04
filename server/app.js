@@ -37,9 +37,9 @@ app.get("/", (req, res) => {
   res.send("Collabify Backend is running!");
 });
 
-app.use("/auth", authRoutes);
-app.use("/user", userRoutes);
-app.use("/workspaces/:workspaceId/tasks", taskRoutes);
-app.use("/workspaces", workspaceRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/workspaces/:workspaceId/tasks", taskRoutes);
+app.use("/api/workspaces", workspaceRoutes);
 
 app.listen(process.env.PORT || 3000);
