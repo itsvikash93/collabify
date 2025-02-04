@@ -33,13 +33,13 @@ const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
 const taskRoutes = require("./routes/tasks.routes");
 const workspaceRoutes = require("./routes/workspaces.routes");
-app.get("/api/", (req, res) => {
+app.get("/", (req, res) => {
   res.send("Collabify Backend is running!");
 });
 
-app.use("/api/auth", authRoutes);
-app.use("/api/user", userRoutes);
-app.use("/api/workspaces/:workspaceId/tasks", taskRoutes);
-app.use("/api/workspaces", workspaceRoutes);
+app.use("/auth", authRoutes);
+app.use("/user", userRoutes);
+app.use("/workspaces/:workspaceId/tasks", taskRoutes);
+app.use("/workspaces", workspaceRoutes);
 
 app.listen(process.env.PORT || 3000);
