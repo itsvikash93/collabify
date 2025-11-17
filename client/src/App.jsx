@@ -11,19 +11,35 @@ const App = () => {
     const response = await axios.get("/");
     console.log(response);
   };
+
   useEffect(() => {
     const tokenGoogle = new URLSearchParams(window.location.search).get(
       "token"
     );
+    console.log(tokenGoogle);
     if (tokenGoogle) {
-      toast.success("Login successful");
       localStorage.setItem("token", tokenGoogle.toString());
-      navigate("/");
+      navigate("/workspaces");
+      // toast.success("Login successful");
     }
     // connectToBackend();
   }, []);
   return (
-    <div className="bg-[#F2F2F2]">
+    <div className="bg-[#cfe7df]">
+      {/* #F2F2F2 */}
+
+      {/* #0F2A1D */}
+      {/* #375534 */}
+      {/* #6B9071 */}
+      {/* #AEC3B0 */}
+      {/* #E3EED4 */}
+
+      {/* #191D23 */}
+      {/* #57707A */}
+      {/* #7B919C */}
+      {/* #989DAA */}
+      {/* #C5BAC4 */}
+      {/* #DEDCDC */}
       <Routing />
     </div>
   );

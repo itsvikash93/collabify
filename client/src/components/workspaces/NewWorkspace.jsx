@@ -29,11 +29,11 @@ const NewWorkspace = ({ showModal, setShowModal, handleAddWorkspace }) => {
   return (
     showModal && (
       <div
-        className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50 modal-overlay"
+        className="fixed inset-0 flex justify-center items-center bg-[#8c8b8b] bg-opacity-60 backdrop-blur-sm modal-overlay"
         onClick={handleOutsideClick}
       >
-        <div className="bg-white px-6 py-4 rounded shadow-lg max-w-md w-full relative">
-          <h2 className="text-xl font-semibold mb-2">Create New Workspace</h2>
+        <div className="bg-[#eef7f6] px-6 py-4 rounded shadow-lg max-w-md w-full relative">
+          <h2 className="text-xl font-semibold text-[#191D23] mb-2">Create New Workspace</h2>
           <form
             onSubmit={handleSubmit(handleSubmitWorkspace)}
             className="flex flex-col gap-2 items-end justify-center"
@@ -41,14 +41,14 @@ const NewWorkspace = ({ showModal, setShowModal, handleAddWorkspace }) => {
             <div className="w-full">
               <label
                 htmlFor="name"
-                className="block text-gray-700 text-sm font-semibold mb-2"
+                className="block text-[#191D23] text-sm font-semibold mb-2"
               >
                 Workspace Name
               </label>
               <input
                 id="name"
                 type="text"
-                className="w-full p-2 border border-gray-400 rounded outline-none"
+                className="w-full p-2 bg-[#cfe7df] text-[#191D23] placeholder-[#191D23] border-none rounded outline-none"
                 placeholder="Enter workspace name"
                 {...register("name")}
                 required
@@ -58,13 +58,13 @@ const NewWorkspace = ({ showModal, setShowModal, handleAddWorkspace }) => {
             <div className="w-full">
               <label
                 htmlFor="description"
-                className="block text-gray-700 text-sm font-semibold mb-2"
+                className="block text-[#191D23] text-sm font-semibold mb-2"
               >
                 Description
               </label>
               <textarea
                 id="description"
-                className="w-full h-20 p-2 border border-gray-400 rounded outline-none resize-none"
+                className="w-full h-20 p-2 bg-[#cfe7df] text-[#191D23] placeholder-[#191D23] border-none rounded outline-none resize-none"
                 placeholder="Enter workspace description"
                 {...register("description")}
                 required
@@ -73,14 +73,14 @@ const NewWorkspace = ({ showModal, setShowModal, handleAddWorkspace }) => {
 
             <button
               type="submit"
-              className="px-3 py-2 mt-1 bg-green-500 text-white rounded hover:bg-green-600 transition-colors duration-200 font-semibold focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              className="px-3 py-2 mt-1 bg-[#7ddabb] text-[#191D23] rounded font-semibold"
             >
               Create Workspace
             </button>
           </form>
           <button
             onClick={() => setShowModal(false)}
-            className="absolute top-2 right-2 p-2 text-gray-500 hover:text-zinc-700 "
+            className="absolute top-2 right-2 p-2 text-[#191D23] "
             aria-label="Close modal"
           >
             <span className="text-2xl">&times;</span>

@@ -12,12 +12,12 @@ export const authSlice = createSlice({
     signUp: (state, action) => {
       state.isAuthenticated = true;
       state.token = action.payload.token;
-      localStorage.setItem("token", action.payload.token);
+      localStorage.setItem("collabifyToken", action.payload.token);
     },
     login: (state, action) => {
       state.isAuthenticated = true;
       state.token = action.payload.token;
-      localStorage.setItem("token", action.payload.token);
+      localStorage.setItem("collabifyToken", action.payload.token);
     },
   },
 });

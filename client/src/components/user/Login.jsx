@@ -16,7 +16,8 @@ const Login = () => {
   };
   const handleGoogleSignup = () => {
     try {
-      window.location.href = "https://collabify-h1gc.onrender.com/api/auth/google";
+      // window.location.href = "https://collabify-h1gc.onrender.com/api/auth/google";
+      window.location.href = "http://localhost:3000/api/auth/google";
     } catch (err) {
       toast.error(err.response.data.message);
     }

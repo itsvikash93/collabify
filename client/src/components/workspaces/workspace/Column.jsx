@@ -13,12 +13,17 @@ const Column = ({
   return (
     <div
       ref={setNodeRef}
-      className="w-1/3 rounded-lg bg-[#fcfcfc] shadow select-none"
+      style={{ background: column.color }}
+      className={`w-1/3 rounded-lg shadow-md select-none`}
     >
-      <h1 className="text-2xl pt-4 font-semibold text-center mb-4">
+      <h1 className="text-2xl pt-4 font-semibold px-4 mb-4 flex items-center gap-2">
+        <span
+          style={{ background: column.color2 }}
+          className="inline-block h-2 w-2 rounded-full"
+        ></span>
         {column.title}
       </h1>
-      <hr className="border-t-2 border-gray-200 my-2" />
+      <hr className="border-t-2 border-[#57707A] my-2" />
       <div className="flex flex-col gap-4 p-4">
         {tasks.map((task, i) => (
           <Task

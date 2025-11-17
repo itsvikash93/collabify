@@ -13,10 +13,12 @@ const { isLoggedIn } = require("../middlewares/auth.middleware");
 router.post("/signup", signupController);
 router.post("/login", loginController);
 router.post("/logout", isLoggedIn, logoutController);
+
 router.get(
   "/google",
   passport.authenticate("google", { scope: ["email", "profile"] })
 );
+
 router.get(
   "/google/callback",
   passport.authenticate("google", {

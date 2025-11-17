@@ -11,7 +11,8 @@ const connectDB = require("./config/mongodb");
 dotenv.config();
 app.use(
   cors({
-    origin: "https://collabify-bice.vercel.app",
+    origin: "http://localhost:5173",
+    // origin: "https://collabify-bice.vercel.app",
     credentials: true,
   })
 );

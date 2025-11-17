@@ -11,7 +11,7 @@ import {
 import { toast } from "react-toastify";
 import DeleteConfirmation from "./delete/DeleteConfirmation";
 
-const Dashboard = () => {
+const Workspaces = () => {
   const [showModal, setShowModal] = useState(false);
   const [deleteDetails, setDeleteDetails] = useState(null); // Tracks the workspace to be deleted
   const dispatch = useDispatch();
@@ -58,12 +58,12 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col">
       <Navbar />
-      <div className="flex w-full overflow-hidden h-[92vh] flex gap-4 p-4">
+      <div className="flex w-full overflow-hidden h-[92vh] gap-4 px-6 py-4">
         <div className="flex-1 w-[80%] rounded-md">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold">My Workspaces</h1>
+            <h1 className="text-2xl font-semibold">My Workspaces</h1>
             <button
-              className="px-4 py-2 bg-blue-600 text-white rounded-md flex items-center gap-2 hover:bg-blue-700 transition-colors"
+              className="px-4 py-2 bg-[#7ddabb] shadow-md text-[#2a2a2a] rounded-full flex items-center gap-2"
               onClick={() => setShowModal(true)}
             >
               <i className="ri-add-circle-line"></i>
@@ -81,10 +81,10 @@ const Dashboard = () => {
               {workspaces.map((workspace) => (
                 <div
                   key={workspace._id}
-                  className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-200"
+                  className="bg-[#eef7f6] p-6 rounded-xl shadow-md transition-all duration-300 border border-[#a8e8e0] hover:border-[#33d1bf]"
                 >
                   <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-xl font-bold text-gray-800 hover:text-blue-600 transition-colors">
+                    <h3 className="text-xl font-bold text-[#191D23]">
                       {workspace.name}
                     </h3>
                     <button
@@ -94,16 +94,16 @@ const Dashboard = () => {
                           name: workspace.name,
                         })
                       }
-                      className="text-red-600 hover:text-red-800"
+                      className="text-red-700 hover:text-red-800"
                     >
                       <i className="ri-delete-bin-line text-xl"></i>
                     </button>
                   </div>
-                  <p className="text-gray-600 mb-6 line-clamp-2">
+                  <p className="text-[#191D23] mb-6 line-clamp-2">
                     {workspace.description}
                   </p>
-                  <div className="flex justify-between items-center pt-4 border-t border-gray-100">
-                    <span className="text-sm text-gray-500 flex items-center">
+                  <div className="flex justify-between items-center pt-4 border-t border-[#57707A]">
+                    <span className="text-sm text-[#191D23] flex items-center">
                       <i className="ri-calendar-line mr-2"></i>
                       {new Date(workspace.createdAt).toLocaleDateString(
                         "en-US",
@@ -117,7 +117,7 @@ const Dashboard = () => {
                     <Link
                       to={`/workspaces/${workspace._id}`}
                       state={workspace.name}
-                      className="inline-flex items-center px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
+                      className="inline-flex items-center px-4 py-2 bg-[#b1e6e0] rounded-lg"
                     >
                       Open
                       <i className="ri-arrow-right-line ml-2"></i>
@@ -149,4 +149,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Workspaces;

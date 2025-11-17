@@ -2,6 +2,7 @@ const userModel = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const blacklistTokenModel = require("../models/blacklistToken.model");
+
 module.exports.signupController = async (req, res) => {
   try {
     const { name, username, email, password, phone, bio } = req.body;
@@ -70,5 +71,7 @@ module.exports.logoutController = async (req, res) => {
 
 module.exports.googleCallbackController = async (req, res) => {
   const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET);
+  console.log(token);
+  
   res.redirect(`http://localhost:5173/?token=${token}`);
 };

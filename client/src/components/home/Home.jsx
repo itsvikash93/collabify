@@ -1,21 +1,13 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
-import { useSelector } from "react-redux";
 
 const Home = () => {
-  const navigate = useNavigate();
-  const { isAuthenticated } = useSelector((state) => state.authReducer);
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-    }
-  }, []);
-
   return (
-    <div>
+    <div className="">
       <Navbar />
-      <h1>Home</h1>
+      <div className="flex w-full overflow-hidden h-[92vh] flex items-center justify-center gap-4 p-4">
+        <h1 className="text-2xl font-semibold">Home</h1>
+      </div>
     </div>
   );
 };

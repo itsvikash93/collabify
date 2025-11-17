@@ -13,16 +13,16 @@ const Workspace = () => {
   const location = useLocation();
   const workspaceName = location.state;
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login");
-    }
-  }, []);
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (!token) {
+  //     navigate("/login");
+  //   }
+  // }, []);
   return (
     <div className="flex flex-col">
       <Navbar />
-      <div className="flex w-full overflow-hidden h-[92vh] flex gap-4 p-4">
+      <div className="flex w-full overflow-hidden h-[92vh] gap-4 p-4">
         <Sidebar
           activeComponent={activeComponent}
           setActiveComponent={setActiveComponent}

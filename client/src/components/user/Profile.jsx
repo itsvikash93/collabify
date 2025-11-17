@@ -1,18 +1,13 @@
 import React, { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Navbar from "../home/Navbar";
 import { useSelector, useDispatch } from "react-redux";
 import { asyncGetUserProfile } from "../../store/actions/UserActions";
 
 const Profile = () => {
-  const navigate = useNavigate();
   const { profile, loading, error } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login");
-    }
     dispatch(asyncGetUserProfile());
   }, []);
   return (

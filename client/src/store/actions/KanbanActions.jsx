@@ -1,5 +1,10 @@
 import axios from "../../utils/axios";
-import { getTasks, updateTask, addTask, deleteTask } from "../reducers/KanbanReducer";
+import {
+  getTasks,
+  updateTask,
+  addTask,
+  deleteTask,
+} from "../reducers/KanbanReducer";
 import { toast } from "react-toastify";
 export const asyncGetTasks = (workspaceId) => (dispatch) => {
   try {
@@ -24,32 +29,40 @@ export const asyncAddTask = (workspaceId, task) => (dispatch) => {
   }
 };
 
-export const asyncUpdateTask = (workspaceId, taskId, newStatus) => (dispatch, getState) => {
-  let previousTasks;
-  try {
-    previousTasks = getState().kanbanReducer.tasks;
-    // console.log(previousTasks);
-    dispatch(updateTask({ taskId, newStatus }));
-    axios.put(`/workspaces/${workspaceId}/tasks/${taskId}`, { status: newStatus });
-    toast.success("Task moved successfully");
-  } catch (error) {
-    console.log(error);
-    toast.error("Failed to move task");
-    const task = previousTasks.find((task) => task._id === taskId);
-    if (task) {
-      dispatch(updateTask({ taskId, status: task.status }));
+export const asyncUpdateTask =
+  (workspaceId, taskId, newStatus) => async (dispatch, getState) => {
+    let previousTasks;
+    try {
+      previousTasks = getState().kanbanReducer.tasks;
+      // console.log(previousTasks);
+      dispatch(updateTask({ taskId, newStatus }));
+      const res = await axios.put(
+        `/workspaces/${workspaceId}/tasks/${taskId}`,
+        {
+          status: newStatus,
+        }
+      );
+      if (res.status == 200) toast.success("Task moved successfully");
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to move task");
+      const task = previousTasks.find((task) => task._id === taskId);
+      if (task) {
+        dispatch(updateTask({ taskId, status: task.status }));
+      }
     }
-  }
-};
+  };
 
-export const asyncDeleteTask = (workspaceId, taskId) => (dispatch) => {
-  try {
-    axios.delete(`/workspaces/${workspaceId}/tasks/${taskId}`).then(() => {
-      dispatch(deleteTask(taskId));
-      toast.success("Task deleted successfully");
-    });
-  } catch (error) {
-    console.log(error);
-    toast.error("Failed to delete task");
-  }
-};
+export const asyncDeleteTask =
+  (workspaceId, taskId, setShowDeleteConfirmation) => (dispatch) => {
+    try {
+      axios.delete(`/workspaces/${workspaceId}/tasks/${taskId}`).then(() => {
+        dispatch(deleteTask(taskId));
+        setShowDeleteConfirmation(false);
+        toast.success("Task deleted successfully");
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to delete task");
+    }
+  };

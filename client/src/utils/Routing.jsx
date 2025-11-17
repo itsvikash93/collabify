@@ -2,18 +2,23 @@ import { Routes, Route } from "react-router-dom";
 import Home from "../components/home/Home";
 import Signup from "../components/user/Signup";
 import Login from "../components/user/Login";
-import Dashboard from "../components/dashboard/Dashboard";
+import Workspaces from "../components/workspaces/Workspaces";
 import Profile from "../components/user/Profile";
-import Workspace from "../components/dashboard/workspace/Workspace";
+import Workspace from "../components/workspaces/workspace/Workspace";
+import ProtectedRoutes from "./ProtectedRoutes";
 const Routing = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/workspaces/:workspaceId" element={<Workspace />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/profile" element={<Profile />} />
+
+      <Route path="/" element={<ProtectedRoutes />}>
+        {/* <Route path="/" element={<Home />} /> */}
+        <Route path="/workspaces" element={<Workspaces />} />
+        <Route path="/workspaces/:workspaceId" element={<Workspace />} />
+        <Route path="/profile" element={<Profile />} />
+      </Route>
+
     </Routes>
   );
 };

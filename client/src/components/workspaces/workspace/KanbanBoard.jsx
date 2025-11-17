@@ -30,9 +30,14 @@ const KanbanBoard = () => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   const columns = [
-    { status: "To-Do", title: "To Do" },
-    { status: "In-Progress", title: "In Progress" },
-    { status: "Done", title: "Done" },
+    { status: "To-Do", title: "To Do", color: "#fbd8f6", color2: "#ff49e4" },
+    {
+      status: "In-Progress",
+      title: "In Progress",
+      color: "#f9e2cd",
+      color2: "#ff9c3f",
+    },
+    { status: "Done", title: "Done", color: "#d1cbfc", color2: "#6854ff" },
   ];
 
   const sensors = useSensors(
@@ -58,7 +63,7 @@ const KanbanBoard = () => {
   };
 
   const handleTaskDelete = (taskId) => {
-    dispatch(asyncDeleteTask(workspaceId, taskId));
+    dispatch(asyncDeleteTask(workspaceId, taskId, setShowDeleteConfirmation));
   };
 
   const handleDragEnd = async (e) => {
@@ -79,12 +84,12 @@ const KanbanBoard = () => {
   }, [getTasks]);
 
   return (
-    <div className="h-full w-full relative rounded-md p-5 shadow-xl overflow-y-auto">
+    <div className="h-full w-full bg-[#eef7f6] relative rounded-md p-5 shadow-xl overflow-y-auto">
       <button
-        className="px-3 py-2 bg-blue-600 text-white rounded absolute bottom-5 right-5 shadow-md flex items-center gap-2"
+        className="px-4 py-2 bg-[#fed465] text-[#000000] rounded-full absolute bottom-5 right-5 shadow-lg flex items-center gap-2"
         onClick={() => setShowModal(true)}
       >
-        <i className="ri-add-circle-line text-xl"></i>
+        <i className="ri-add-circle-line text-lg"></i>
         Add New Task
       </button>
 
