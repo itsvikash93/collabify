@@ -12,7 +12,7 @@ const Login = () => {
   const handleSubmitForm = (data) => {
     dispatch(asyncLogin(data));
     reset();
-    navigate("/");
+    navigate("/workspaces");
   };
   const handleGoogleSignup = () => {
     try {

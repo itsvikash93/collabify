@@ -10,6 +10,7 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     signUp: (state, action) => {
+      console.log({ state, action });
       state.isAuthenticated = true;
       state.token = action.payload.token;
       localStorage.setItem("collabifyToken", action.payload.token);

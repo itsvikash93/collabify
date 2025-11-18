@@ -2,7 +2,7 @@ import axios from "../../utils/axios";
 import { getUserProfile } from "../reducers/UserReducer";
 export const asyncGetUserProfile = () => (dispatch) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("collabifyToken");
     axios
       .get("/user/profile", {
         headers: {

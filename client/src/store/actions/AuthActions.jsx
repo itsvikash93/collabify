@@ -14,7 +14,7 @@ export const asyncSignUp = (userData) => async (dispatch) => {
 
 export const asyncLogin = (userData) => async (dispatch) => {
   try {
-    const res = await axios.post("/auth/login", userData)
+    const res = await axios.post("/auth/login", userData);
     if (res.status === 200) {
       dispatch(login(res.data));
     }

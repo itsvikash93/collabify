@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "../components/home/Home";
 import Signup from "../components/user/Signup";
 import Login from "../components/user/Login";
@@ -13,12 +13,11 @@ const Routing = () => {
       <Route path="/login" element={<Login />} />
 
       <Route path="/" element={<ProtectedRoutes />}>
-        {/* <Route path="/" element={<Home />} /> */}
+        <Route path="/" element={<Navigate to="/workspaces" replace />} />
         <Route path="/workspaces" element={<Workspaces />} />
         <Route path="/workspaces/:workspaceId" element={<Workspace />} />
         <Route path="/profile" element={<Profile />} />
       </Route>
-
     </Routes>
   );
 };
