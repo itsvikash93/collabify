@@ -45,7 +45,7 @@ const KanbanBoard = () => {
       activationConstraint: {
         distance: 30,
       },
-    })
+    }),
   );
 
   const getTasks = useCallback(async () => {
@@ -81,12 +81,12 @@ const KanbanBoard = () => {
 
   useEffect(() => {
     getTasks();
-  }, [getTasks]);
+  }, []);
 
   return (
-    <div className="h-full w-full bg-[#eef7f6] relative rounded-md p-5 shadow-xl overflow-y-auto">
+    <div className="h-full w-full bg-[#eef7f6] relative rounded-md p-5 shadow-xl overflow-auto">
       <button
-        className="px-4 py-2 bg-[#fed465] text-[#000000] rounded-full absolute bottom-5 right-5 shadow-lg flex items-center gap-2"
+        className="px-4 py-2 bg-[#fed465] text-[#000000] rounded-full fixed bottom-8 right-8 shadow-lg flex items-center gap-2"
         onClick={() => setShowModal(true)}
       >
         <i className="ri-add-circle-line text-lg"></i>

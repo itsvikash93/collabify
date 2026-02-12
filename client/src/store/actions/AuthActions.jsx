@@ -16,23 +16,26 @@ export const asyncSignUp =
         }
       }
     } catch (error) {
+      toast.error(error?.response?.data?.message);
       console.log(error);
     }
   };
 
-export const asyncLogin = (userData, loginSuccessCallback) => async (dispatch) => {
-  try {
-    const res = await axios.post("/auth/login", userData);
-    if (res?.status === 200) {
-      dispatch(login(res?.data));
-      localStorage.setItem("collabifyToken", res?.data?.token);
-      toast.success(res?.data?.message);
+export const asyncLogin =
+  (userData, loginSuccessCallback) => async (dispatch) => {
+    try {
+      const res = await axios.post("/auth/login", userData);
+      if (res?.status === 200) {
+        dispatch(login(res?.data));
+        localStorage.setItem("collabifyToken", res?.data?.token);
+        toast.success(res?.data?.message);
 
-      if (loginSuccessCallback) {
-        loginSuccessCallback();
+        if (loginSuccessCallback) {
+          loginSuccessCallback();
+        }
       }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
-  }
-};
+  };

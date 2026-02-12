@@ -28,7 +28,7 @@ const TaskModal = ({ showModal, setShowModal, handleAddTask }) => {
   return (
     showModal && (
       <div
-        className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50 modal-overlay"
+        className="fixed z-[999] inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50 modal-overlay"
         onClick={handleOutsideClick}
       >
         <div className="bg-white px-6 py-4 rounded shadow-lg max-w-md w-full relative">
