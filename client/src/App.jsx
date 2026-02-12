@@ -16,7 +16,7 @@ const App = () => {
     const tokenGoogle = new URLSearchParams(window.location.search).get(
       "token"
     );
-    console.log(tokenGoogle);
+    // console.log(tokenGoogle);
     if (tokenGoogle) {
       localStorage.setItem("token", tokenGoogle.toString());
       navigate("/workspaces");

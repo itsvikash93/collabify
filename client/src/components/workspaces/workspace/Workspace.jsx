@@ -5,6 +5,7 @@ import TextEditor from "./TextEditor";
 import ActivityLog from "./ActivityLog";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Navbar from "../../home/Navbar";
+import RealTimeEditor from "./textEditor/RealTimeEditor";
 
 const Workspace = () => {
   const navigate = useNavigate();
@@ -31,7 +32,9 @@ const Workspace = () => {
 
         <div className="flex-1 w-[80%] rounded-md">
           {activeComponent === "kanban" && <KanbanBoard />}
-          {activeComponent === "editor" && <TextEditor />}
+          {activeComponent === "editor" && (
+            <RealTimeEditor workspaceId={workspaceId} />
+          )}
           {activeComponent === "activity" && <ActivityLog />}
         </div>
       </div>

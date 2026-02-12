@@ -10,11 +10,16 @@ const Signup = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { register, handleSubmit, reset } = useForm();
-  const handleSubmitForm = (data) => {
-    dispatch(asyncSignUp(data));
+
+  const signupSuccessCallback = () => {
     reset();
     navigate("/workspaces");
   };
+
+  const handleSubmitForm = (data) => {
+    dispatch(asyncSignUp(data, signupSuccessCallback));
+  };
+
   const handleGoogleSignup = () => {
     try {
       // window.location.href = "https://collabify-h1gc.onrender.com/api/auth/google";
@@ -87,13 +92,13 @@ const Signup = () => {
           </button>
         </form>
       </div>
-      <div className="" onClick={handleGoogleSignup}>
+      {/* <div className="" onClick={handleGoogleSignup}>
         <img
           className="h-12 cursor-pointer hover:scale-105 transition-all duration-300 shadow-lg"
           src="/signup_with_google.png"
           alt=""
         />
-      </div>
+      </div> */}
     </div>
   );
 };
