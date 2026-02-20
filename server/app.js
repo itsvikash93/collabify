@@ -12,7 +12,10 @@ const { createServer } = require("http");
 
 const server = createServer(app);
 const io = new Server(server, {
-  cors: "http://localhost:5173",
+  cors: {
+    origin: "http://localhost:5173",
+    credentials: true,
+  },
 });
 
 dotenv.config();
@@ -53,9 +56,15 @@ app.use("/api/workspaces/:workspaceId/tasks", taskRoutes);
 app.use("/api/workspaces", workspaceRoutes);
 app.use("/api/editor", editorRoutes);
 
-io.on("connection", (socket) => {
-  console.log("A user is connected");
-});
+// io.on("connection", (socket) => {
+//   console.log("A user is connected", socket.id);
+//   socket.on("disconnect", () => {
+//     console.log("A user is disconnected", socket.id);
+//   });
+// });
+
+const initializeSockets = require("./sockets");
+initializeSockets(io);
 
 // app.listen(process.env.PORT || 3000);
 

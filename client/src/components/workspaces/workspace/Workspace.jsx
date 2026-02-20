@@ -3,16 +3,18 @@ import KanbanBoard from "./KanbanBoard";
 import Sidebar from "./Sidebar";
 import TextEditor from "./TextEditor";
 import ActivityLog from "./ActivityLog";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import Navbar from "../../home/Navbar";
-import RealTimeEditor from "./textEditor/RealTimeEditor";
+import RealTimeEditor from "./textEditor/EditorPage";
 
 const Workspace = () => {
   const navigate = useNavigate();
   const { workspaceId } = useParams();
-  const [activeComponent, setActiveComponent] = useState("kanban");
+  // const [activeComponent, setActiveComponent] = useState("kanban");
   const location = useLocation();
   const workspaceName = location.state;
+
+  const activeComponent = location.pathname.split("/").pop();
 
   // useEffect(() => {
   //   const token = localStorage.getItem("token");
@@ -26,16 +28,13 @@ const Workspace = () => {
       <div className="flex w-full overflow-hidden h-[92vh] gap-4 p-4">
         <Sidebar
           activeComponent={activeComponent}
-          setActiveComponent={setActiveComponent}
+          workspaceId={workspaceId}
+          // setActiveComponent={setActiveComponent}
           workspaceName={workspaceName}
         />
 
         <div className="flex-1 w-[80%] rounded-md">
-          {activeComponent === "kanban" && <KanbanBoard />}
-          {activeComponent === "editor" && (
-            <RealTimeEditor workspaceId={workspaceId} />
-          )}
-          {activeComponent === "activity" && <ActivityLog />}
+          <Outlet />
         </div>
       </div>
     </div>
