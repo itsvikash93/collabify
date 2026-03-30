@@ -39,3 +39,19 @@ export const asyncLogin =
       console.log(error);
     }
   };
+
+export const asyncLogout = (logoutSuccessCallback) => async (dispatch) => {
+  try {
+    const res = await axios.post("/auth/logout");
+    if (res?.status === 200) {
+      localStorage.removeItem("collabifyToken");
+      toast.success(res?.data?.message);
+      if (logoutSuccessCallback) {
+        logoutSuccessCallback();
+      }
+    }
+  } catch (error) {
+    toast.error(error?.response?.data?.message || "Failed to logout");
+    console.log(error);
+  }
+};

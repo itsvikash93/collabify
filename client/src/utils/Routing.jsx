@@ -5,6 +5,7 @@ import Login from "../components/user/Login";
 import Workspaces from "../components/workspaces/Workspaces";
 import Profile from "../components/user/Profile";
 import Workspace from "../components/workspaces/workspace/Workspace";
+import Invite from "../components/workspaces/Invite";
 import ProtectedRoutes from "./ProtectedRoutes";
 import EditorPage from "../components/workspaces/workspace/textEditor/EditorPage";
 import KanbanBoard from "../components/workspaces/workspace/KanbanBoard";
@@ -25,6 +26,7 @@ const Routing = () => {
         </Route>
 
         <Route path="/profile" element={<Profile />} />
+        <Route path="/invite/:code" element={<Invite />} />
       </Route>
     </Routes>
   );

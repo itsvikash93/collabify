@@ -6,17 +6,23 @@ const {
   createWorkspace,
   updateWorkspace,
   deleteWorkspace,
+  joinWorkspace,
 } = require("../controllers/workspaces.controller");
-// const { isLoggedIn } = require("../middlewares/auth.middleware");
+const { getWorkspaceChats } = require("../controllers/chat.controller");
+const { isLoggedIn } = require("../middlewares/auth.middleware");
 
-router.get("/", getWorkspaces);
+router.get("/", isLoggedIn, getWorkspaces);
 
-router.get("/:id", getWorkspaceById);
+router.get("/:id", isLoggedIn, getWorkspaceById);
 
-router.post("/", createWorkspace);
+router.post("/", isLoggedIn, createWorkspace);
 
-router.put("/:id", updateWorkspace);
+router.put("/:id", isLoggedIn, updateWorkspace);
 
-router.delete("/:id", deleteWorkspace);
+router.delete("/:id", isLoggedIn, deleteWorkspace);
+
+router.post("/join/:inviteCode", isLoggedIn, joinWorkspace);
+
+router.get("/:id/chats", isLoggedIn, getWorkspaceChats);
 
 module.exports = router;

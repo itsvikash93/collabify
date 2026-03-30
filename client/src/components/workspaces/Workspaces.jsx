@@ -1,18 +1,25 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Navbar from "../home/Navbar";
 import NewWorkspace from "./NewWorkspace";
+import JoinWorkspace from "./JoinWorkspace";
+import EditWorkspace from "./EditWorkspace";
 import { Link } from "react-router-dom";
+import axios from "../../utils/axios";
 import { useDispatch, useSelector } from "react-redux";
 import {
   asyncGetWorkspaces,
   asyncAddWorkspace,
   asyncDeleteWorkspace,
+  asyncUpdateWorkspace,
 } from "../../store/actions/WorkspaceActions";
 import { toast } from "react-toastify";
 import DeleteConfirmation from "./delete/DeleteConfirmation";
 
 const Workspaces = () => {
   const [showModal, setShowModal] = useState(false);
+  const [showJoinModal, setShowJoinModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [workspaceToEdit, setWorkspaceToEdit] = useState(null);
   const [deleteDetails, setDeleteDetails] = useState(null); // Tracks the workspace to be deleted
   const dispatch = useDispatch();
   const { workspaces } = useSelector((state) => state.workspaceReducer);
@@ -35,6 +42,31 @@ const Workspaces = () => {
         console.error("Failed to add workspace:", error);
       }
     },
+    [dispatch],
+  );
+
+  const handleJoinWorkspace = useCallback(async (inviteCode) => {
+    try {
+      await axios.post(`/workspaces/join/${inviteCode}`);
+      toast.success("Successfully joined the workspace!");
+      setShowJoinModal(false);
+      getWorkspaces(); // refresh list
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Failed to join workspace.");
+    }
+  }, [getWorkspaces]);
+
+  const handleUpdate = useCallback(
+    async (workspaceId, updatedData) => {
+      try {
+        await dispatch(asyncUpdateWorkspace(workspaceId, updatedData));
+        setShowEditModal(false);
+        setWorkspaceToEdit(null);
+      } catch (error) {
+        console.error("Failed to update workspace:", error);
+      }
+    },
     [dispatch]
   );
 
@@ -48,7 +80,7 @@ const Workspaces = () => {
         toast.error("Failed to delete workspace. Please try again.");
       }
     },
-    [dispatch]
+    [dispatch],
   );
 
   useEffect(() => {
@@ -62,17 +94,31 @@ const Workspaces = () => {
         <div className="flex-1 w-[80%] rounded-md">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-semibold">My Workspaces</h1>
-            <button
-              className="px-4 py-2 bg-[#7ddabb] shadow-md text-[#2a2a2a] rounded-full flex items-center gap-2"
-              onClick={() => setShowModal(true)}
-            >
-              <i className="ri-add-circle-line"></i>
-              New Workspace
-            </button>
+            <div className="flex gap-4">
+              <button
+                className="px-4 py-2 bg-white shadow-md text-[#2a2a2a] rounded-full flex items-center gap-2 border border-[#7ddabb] hover:bg-[#eef7f6] transition-colors"
+                onClick={() => setShowJoinModal(true)}
+              >
+                <i className="ri-group-line"></i>
+                Join Workspace
+              </button>
+              <button
+                className="px-4 py-2 bg-[#7ddabb] shadow-md text-[#2a2a2a] rounded-full flex items-center gap-2 hover:bg-[#68c5a5] transition-colors"
+                onClick={() => setShowModal(true)}
+              >
+                <i className="ri-add-circle-line"></i>
+                New Workspace
+              </button>
+            </div>
             <NewWorkspace
               showModal={showModal}
               setShowModal={setShowModal}
               handleAddWorkspace={handleAddWorkspace}
+            />
+            <JoinWorkspace
+              showJoinModal={showJoinModal}
+              setShowJoinModal={setShowJoinModal}
+              handleJoinWorkspace={handleJoinWorkspace}
             />
           </div>
 
@@ -87,17 +133,28 @@ const Workspaces = () => {
                     <h3 className="text-xl font-bold text-[#191D23]">
                       {workspace.name}
                     </h3>
-                    <button
-                      onClick={() =>
-                        setDeleteDetails({
-                          id: workspace._id,
-                          name: workspace.name,
-                        })
-                      }
-                      className="text-red-700 hover:text-red-800"
-                    >
-                      <i className="ri-delete-bin-line text-xl"></i>
-                    </button>
+                    <div className="flex gap-2 items-center">
+                      <button
+                        onClick={() => {
+                          setWorkspaceToEdit(workspace);
+                          setShowEditModal(true);
+                        }}
+                        className="text-blue-700 hover:text-blue-800"
+                      >
+                        <i className="ri-pencil-line text-xl"></i>
+                      </button>
+                      <button
+                        onClick={() =>
+                          setDeleteDetails({
+                            id: workspace._id,
+                            name: workspace.name,
+                          })
+                        }
+                        className="text-red-700 hover:text-red-800"
+                      >
+                        <i className="ri-delete-bin-line text-xl"></i>
+                      </button>
+                    </div>
                   </div>
                   <p className="text-[#191D23] mb-6 line-clamp-2">
                     {workspace.description}
@@ -111,12 +168,12 @@ const Workspaces = () => {
                           year: "numeric",
                           month: "short",
                           day: "numeric",
-                        }
+                        },
                       )}
                     </span>
                     <Link
                       to={`/workspaces/${workspace._id}`}
-                      state={workspace.name}
+                      state={{ name: workspace.name, inviteCode: workspace.inviteCode }}
                       className="inline-flex items-center px-4 py-2 bg-[#b1e6e0] rounded-lg"
                     >
                       Open
@@ -145,6 +202,13 @@ const Workspaces = () => {
           onCancel={() => setDeleteDetails(null)}
         />
       )}
+      {/* Edit Confirmation Modal */}
+      <EditWorkspace
+        showEditModal={showEditModal}
+        setShowEditModal={setShowEditModal}
+        workspaceToEdit={workspaceToEdit}
+        handleUpdateWorkspace={handleUpdate}
+      />
     </div>
   );
 };

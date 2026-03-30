@@ -28,10 +28,10 @@ export const asyncAddWorkspace = (workspace) => (dispatch) => {
   }
 };
 
-export const asyncUpdateWorkspace = (workspaceId, newName) => (dispatch) => {
+export const asyncUpdateWorkspace = (workspaceId, updatedData) => (dispatch) => {
   try {
-    axios.put(`/workspaces/${workspaceId}`, { name: newName }).then((res) => {
-      dispatch(updateWorkspace({ workspaceId, newName }));
+    axios.put(`/workspaces/${workspaceId}`, updatedData).then((res) => {
+      dispatch(updateWorkspace({ workspaceId, updatedData }));
       toast.success("Workspace updated successfully");
     });
   } catch (error) {

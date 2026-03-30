@@ -17,12 +17,13 @@ export const workspaceSlice = createSlice({
       state.workspaces.push(action.payload);
     },
     updateWorkspace: (state, action) => {
-      const { workspaceId, newName } = action.payload;
+      const { workspaceId, updatedData } = action.payload;
       const workspace = state.workspaces.find(
         (workspace) => workspace._id === workspaceId
       );
       if (workspace) {
-        workspace.name = newName;
+        workspace.name = updatedData.name || workspace.name;
+        workspace.description = updatedData.description || workspace.description;
       }
     },
     deleteWorkspace: (state, action) => {

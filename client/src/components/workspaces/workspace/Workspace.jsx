@@ -12,7 +12,8 @@ const Workspace = () => {
   const { workspaceId } = useParams();
   // const [activeComponent, setActiveComponent] = useState("kanban");
   const location = useLocation();
-  const workspaceName = location.state;
+  const workspaceName = location.state?.name || location.state;
+  const inviteCode = location.state?.inviteCode;
 
   const activeComponent = location.pathname.split("/").pop();
 
@@ -26,12 +27,13 @@ const Workspace = () => {
     <div className="flex flex-col">
       <Navbar />
       <div className="flex w-full overflow-hidden h-[92vh] gap-4 p-4">
-        <Sidebar
-          activeComponent={activeComponent}
-          workspaceId={workspaceId}
-          // setActiveComponent={setActiveComponent}
-          workspaceName={workspaceName}
-        />
+          <Sidebar
+            activeComponent={activeComponent}
+            workspaceId={workspaceId}
+            // setActiveComponent={setActiveComponent}
+            workspaceName={workspaceName}
+            inviteCode={inviteCode}
+          />
 
         <div className="flex-1 w-[80%] rounded-md">
           <Outlet />

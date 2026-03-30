@@ -21,7 +21,7 @@ const editorSocket = (io, socket) => {
 
   socket.on("editor:cursor-move", ({ workspaceId, userId, range }) => {
     const room = `workspace:${workspaceId}`;
-    // console.log("Cursor moved:", range);
+    console.log({ workspaceId, userId, range });
 
     socket.to(room).emit("editor:receive-cursor", {
       userId,

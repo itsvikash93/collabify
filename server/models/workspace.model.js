@@ -4,10 +4,11 @@ const workspaceSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     description: { type: String, default: "No description provided." },
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    inviteCode: { type: String, unique: true, sparse: true },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
     members: [
       {
-        userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
         role: {
           type: String,
           enum: ["Admin", "Member", "Viewer"],
@@ -18,7 +19,7 @@ const workspaceSchema = new mongoose.Schema(
     tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
     chats: [{ type: mongoose.Schema.Types.ObjectId, ref: "Chat" }],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 workspaceSchema.pre("save", function (next) {
