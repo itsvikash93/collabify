@@ -7,6 +7,7 @@ const passport = require("passport");
 const expressSession = require("express-session");
 const googleStrategy = require("./config/googleStrategy");
 const connectDB = require("./config/mongodb");
+const { isLoggedIn } = require("./middlewares/auth.middleware");
 const { Server } = require("socket.io");
 const { createServer } = require("http");
 
@@ -45,6 +46,7 @@ const userRoutes = require("./routes/user.routes");
 const taskRoutes = require("./routes/tasks.routes");
 const workspaceRoutes = require("./routes/workspaces.routes");
 const editorRoutes = require("./routes/editor.routes");
+const activityRoutes = require("./routes/activity.routes");
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Collabify Backend is running!" });
@@ -52,7 +54,8 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/workspaces/:workspaceId/tasks", taskRoutes);
+app.use("/api/workspaces/:workspaceId/tasks", isLoggedIn, taskRoutes);
+app.use("/api/workspaces/:workspaceId/activities", isLoggedIn, activityRoutes);
 app.use("/api/workspaces", workspaceRoutes);
 app.use("/api/editor", editorRoutes);
 

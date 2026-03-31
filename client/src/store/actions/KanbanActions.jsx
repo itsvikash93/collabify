@@ -30,25 +30,23 @@ export const asyncAddTask = (workspaceId, task) => (dispatch) => {
 };
 
 export const asyncUpdateTask =
-  (workspaceId, taskId, newStatus) => async (dispatch, getState) => {
+  (workspaceId, taskId, updatedData) => async (dispatch, getState) => {
     let previousTasks;
     try {
       previousTasks = getState().kanbanReducer.tasks;
-      // console.log(previousTasks);
-      dispatch(updateTask({ taskId, newStatus }));
+      dispatch(updateTask({ taskId, updatedData }));
       const res = await axios.put(
         `/workspaces/${workspaceId}/tasks/${taskId}`,
-        {
-          status: newStatus,
-        }
+        updatedData
       );
-      if (res.status == 200) toast.success("Task moved successfully");
+      if (res.status == 200) toast.success("Task updated successfully");
     } catch (error) {
       console.log(error);
-      toast.error("Failed to move task");
+      toast.error("Failed to update task");
       const task = previousTasks.find((task) => task._id === taskId);
       if (task) {
-        dispatch(updateTask({ taskId, status: task.status }));
+        // Rollback generically to entire previous task state
+        dispatch(updateTask({ taskId, updatedData: task }));
       }
     }
   };

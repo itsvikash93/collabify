@@ -89,11 +89,38 @@ const Chats = () => {
     return colors[sum % colors.length];
   };
 
+  const renderDateLabel = (dateStr) => {
+    const msgDate = new Date(dateStr);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    if (msgDate.toDateString() === today.toDateString()) {
+      return "Today";
+    } else if (msgDate.toDateString() === yesterday.toDateString()) {
+      return "Yesterday";
+    } else {
+      const day = msgDate.getDate();
+      const ordinal = (d) => {
+        if (d > 3 && d < 21) return 'th';
+        switch (d % 10) {
+          case 1:  return "st";
+          case 2:  return "nd";
+          case 3:  return "rd";
+          default: return "th";
+        }
+      };
+      const month = msgDate.toLocaleString('default', { month: 'short' });
+      const year = msgDate.getFullYear();
+      return `${day}${ordinal(day)} ${month} ${year}`;
+    }
+  };
+
   return (
     <div className="bg-[#eef7f6] min-h-full rounded-md p-5 shadow-xl w-1/3 flex flex-col border border-[#a8e8e0]">
       <h2 className="text-xl font-bold text-[#191D23] mb-4 border-b border-[#a8e8e0] pb-2">Workspace Chat</h2>
       
-      <div className="flex-1 overflow-y-auto pr-2 mb-4 flex flex-col gap-3 scrollbar-thin">
+      <div className="flex-1 overflow-y-auto pr-2 mb-4 flex flex-col gap-3 scrollbar-thin relative pt-2">
         {isFetching ? (
           <div className="flex justify-center items-center h-full">
             <i className="ri-loader-line text-2xl animate-spin text-[#33d1bf]"></i>
@@ -107,24 +134,43 @@ const Chats = () => {
             const isMe = msg.sender?._id === profile?._id;
             const senderName = msg.sender?.name || "Unknown User";
 
-            return (
-              <div key={msg._id || idx} className={`flex gap-2 ${isMe ? "flex-row-reverse" : ""}`}>
-                <div 
-                  className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-sm mt-1"
-                  style={{ backgroundColor: getColor(senderName) }}
-                  title={senderName}
-                >
-                  {getInitials(senderName)}
-                </div>
-                <div className={`flex flex-col gap-1 max-w-[75%] ${isMe ? "items-end" : "items-start"}`}>
-                  <span className="text-[10px] text-gray-500 px-1">
-                    {senderName} • {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            // Extract logic formatting headers differentiating discrete dates 
+            const msgDate = new Date(msg.timestamp);
+            const currentDateString = msgDate.toDateString();
+            const prevMsgDateString = idx > 0 ? new Date(messages[idx - 1].timestamp).toDateString() : null;
+            
+            let dateSeparator = null;
+            if (currentDateString !== prevMsgDateString) {
+              dateSeparator = (
+                <div className="flex justify-center my-4 w-full relative z-10">
+                  <span className="text-[11px] font-medium text-gray-500 bg-[#e2efee] px-4 py-1 rounded-full shadow-sm border border-[#a8e8e0] shadow-[#cee8e5]">
+                    {renderDateLabel(msgDate)}
                   </span>
-                  <div className={`px-3 py-2 rounded-xl text-sm shadow-sm whitespace-pre-wrap break-words w-full ${isMe ? "bg-[#33d1bf] text-white rounded-tr-none" : "bg-white text-[#191D23] rounded-tl-none border border-[#e2e8f0]"}`}>
-                    {msg.content}
+                </div>
+              );
+            }
+
+            return (
+              <React.Fragment key={msg._id || idx}>
+                {dateSeparator}
+                <div className={`flex gap-2 ${isMe ? "flex-row-reverse" : ""}`}>
+                  <div 
+                    className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-sm mt-1"
+                    style={{ backgroundColor: getColor(senderName) }}
+                    title={senderName}
+                  >
+                    {getInitials(senderName)}
+                  </div>
+                  <div className={`flex flex-col gap-1 max-w-[75%] ${isMe ? "items-end" : "items-start"}`}>
+                    <span className="text-[10px] text-gray-400 px-1 font-medium tracking-wide">
+                      {senderName} • {msgDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                    <div className={`px-3 py-2 rounded-xl text-sm shadow-sm whitespace-pre-wrap break-words w-full ${isMe ? "bg-[#33d1bf] text-white rounded-tr-none" : "bg-white text-[#191D23] rounded-tl-none border border-[#e2e8f0]"}`}>
+                      {msg.content}
+                    </div>
                   </div>
                 </div>
-              </div>
+              </React.Fragment>
             );
           })
         )}

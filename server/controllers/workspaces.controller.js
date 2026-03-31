@@ -1,5 +1,6 @@
 const workspaceModel = require("../models/workspace.model");
 const taskModel = require("../models/task.model");
+const activityModel = require("../models/activity.model");
 const crypto = require("crypto");
 
 module.exports.getWorkspaces = async (req, res) => {
@@ -67,6 +68,12 @@ module.exports.joinWorkspace = async (req, res) => {
     // Add user as a member
     workspace.members.push({ userId: req.userId, role: "Member" });
     await workspace.save();
+
+    await activityModel.create({
+      workspace: workspace._id,
+      user: req.userId,
+      message: "Joined the workspace",
+    });
 
     const populatedWorkspace = await workspaceModel.findById(workspace._id).populate("members.userId", "name email");
 

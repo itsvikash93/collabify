@@ -49,42 +49,11 @@
 
 // export default EditorPage;
 
-import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { socket } from "../../../../socket/socket";
+import React from "react";
 import Chats from "./Chats";
 import RealTimeEditor from "./RealTimeEditor";
 
 const EditorPage = () => {
-  const { workspaceId } = useParams();
-  const handleReceiveChanges = (data) => {
-    console.log("Incoming changes:", data);
-  };
-
-  useEffect(() => {
-    // connect only if not connected
-    if (!socket.connected) {
-      socket.connect();
-    }
-
-    // join workspace room
-    socket.emit("workspace:join", { workspaceId });
-
-    socket.on("editor:receive-changes", handleReceiveChanges);
-
-    return () => {
-      socket.emit("workspace:leave", { workspaceId });
-      socket.off("editor:receive-changes", handleReceiveChanges);
-    };
-  }, [workspaceId]);
-
-  const handleChange = (content) => {
-    socket.emit("editor:send-changes", {
-      workspaceId,
-      content,
-    });
-  };
-
   return (
     <div className="flex h-full w-full gap-4 overflow-hidden">
       <RealTimeEditor />

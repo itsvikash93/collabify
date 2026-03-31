@@ -19,12 +19,19 @@ const Navbar = () => {
       </div>
       <div className="flex gap-10 p-2 rounded-md">
         <Link to="/workspaces">
-          <h5 className="text-lg font-semibold">Workspaces</h5>
+          <h5 className="text-lg font-semibold text-gray-700 hover:text-gray-900 transition-colors">
+            Workspaces
+          </h5>
         </Link>
         <Link to="/profile">
-          <h5 className="text-lg font-semibold hover:text-[#33d1bf] transition-colors">Profile</h5>
+          <h5 className="text-lg font-semibold text-gray-700 hover:text-gray-900 transition-colors">
+            Profile
+          </h5>
         </Link>
-        <button onClick={handleLogout} className="text-lg font-semibold text-red-500 hover:text-red-700 transition-colors">
+        <button
+          onClick={handleLogout}
+          className="text-lg font-semibold text-red-500 hover:text-red-700 transition-colors"
+        >
           Logout
         </button>
       </div>

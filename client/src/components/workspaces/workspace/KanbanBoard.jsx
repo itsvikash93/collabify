@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import AddTask from "./task/AddTask";
+import EditTask from "./task/EditTask";
 import {
   asyncGetTasks,
   asyncUpdateTask,
@@ -25,9 +26,14 @@ const KanbanBoard = () => {
   const { tasks } = useSelector((state) => state.kanbanReducer);
 
   const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const [showTaskDetails, setShowTaskDetails] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
+  // Directly derive the live task reference dynamically from the Redux cache 
+  // blocking stale states inherently when async loops reload assignments!
+  const liveSelectedTask = tasks.find(t => t._id === selectedTask?._id) || selectedTask;
 
   const columns = [
     { status: "To-Do", title: "To Do", color: "#fbd8f6", color2: "#ff49e4" },
@@ -62,6 +68,11 @@ const KanbanBoard = () => {
     dispatch(asyncAddTask(workspaceId, taskData));
   };
 
+  const handleEditTask = async (taskId, updatedData) => {
+    await dispatch(asyncUpdateTask(workspaceId, taskId, updatedData));
+    getTasks();
+  };
+
   const handleTaskDelete = (taskId) => {
     dispatch(asyncDeleteTask(workspaceId, taskId, setShowDeleteConfirmation));
   };
@@ -75,7 +86,7 @@ const KanbanBoard = () => {
     const taskStatus = active.data.current.status;
 
     if (taskStatus === newStatus) return;
-    await dispatch(asyncUpdateTask(workspaceId, taskId, newStatus));
+    await dispatch(asyncUpdateTask(workspaceId, taskId, { status: newStatus }));
     getTasks();
   };
 
@@ -98,6 +109,15 @@ const KanbanBoard = () => {
         setShowModal={setShowModal}
         handleAddTask={handleAddTask}
       />
+      
+      {showEditModal && liveSelectedTask && (
+        <EditTask
+          showModal={showEditModal}
+          setShowModal={setShowEditModal}
+          handleEditTask={handleEditTask}
+          task={liveSelectedTask}
+        />
+      )}
 
       <div className="flex gap-10 w-full ">
         <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
@@ -114,20 +134,22 @@ const KanbanBoard = () => {
         </DndContext>
       </div>
 
-      {showTaskDetails && (
+      {showTaskDetails && liveSelectedTask && (
         <TaskDetails
-          task={selectedTask}
+          task={liveSelectedTask}
           setShowTaskDetails={setShowTaskDetails}
           setShowDeleteConfirmation={setShowDeleteConfirmation}
           setSelectedTask={setSelectedTask}
+          setShowEditModal={setShowEditModal}
+          handleEditTask={handleEditTask}
         />
       )}
 
-      {showDeleteConfirmation && (
+      {showDeleteConfirmation && liveSelectedTask && (
         <DeleteConfirmation
-          itemId={selectedTask._id}
-          itemName={selectedTask.title}
-          onDelete={() => handleTaskDelete(selectedTask._id)}
+          itemId={liveSelectedTask._id}
+          itemName={liveSelectedTask.title}
+          onDelete={() => handleTaskDelete(liveSelectedTask._id)}
           onCancel={() => setShowDeleteConfirmation(false)}
         />
       )}

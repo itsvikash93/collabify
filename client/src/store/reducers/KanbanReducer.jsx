@@ -17,10 +17,10 @@ export const kanbanSlice = createSlice({
       state.tasks.push(action.payload);
     },
     updateTask: (state, action) => {
-      const { taskId, newStatus } = action.payload;
-      const task = state.tasks.find((task) => task._id === taskId);
-      if (task) {
-        task.status = newStatus;
+      const { taskId, updatedData } = action.payload;
+      const taskIndex = state.tasks.findIndex((task) => task._id === taskId);
+      if (taskIndex !== -1) {
+        state.tasks[taskIndex] = { ...state.tasks[taskIndex], ...updatedData };
       }
     },
     deleteTask: (state, action) => {

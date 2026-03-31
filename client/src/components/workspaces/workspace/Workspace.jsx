@@ -6,23 +6,46 @@ import ActivityLog from "./ActivityLog";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import Navbar from "../../home/Navbar";
 import RealTimeEditor from "./textEditor/EditorPage";
+import { socket } from "../../../socket/socket";
+import { useSelector } from "react-redux";
 
 const Workspace = () => {
   const navigate = useNavigate();
   const { workspaceId } = useParams();
-  // const [activeComponent, setActiveComponent] = useState("kanban");
   const location = useLocation();
   const workspaceName = location.state?.name || location.state;
   const inviteCode = location.state?.inviteCode;
 
   const activeComponent = location.pathname.split("/").pop();
+  
+  // Track Live Active Workspace Users globally!
+  const [onlineUsers, setOnlineUsers] = useState([]);
+  const userProfile = useSelector((state) => state.userReducer.profile);
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (!token) {
-  //     navigate("/login");
-  //   }
-  // }, []);
+  useEffect(() => {
+    // connect only if not connected
+    if (!socket.connected) {
+      socket.connect();
+    }
+
+    const userId = userProfile?._id || "anonymous";
+    const userName = userProfile?.name || "User";
+
+    // globally join workspace room representing generic presence
+    socket.emit("workspace:join", { workspaceId, userId, userName });
+
+    const handleOnlineUsers = (usersList) => {
+      setOnlineUsers(usersList);
+    };
+
+    socket.on("workspace:online-users", handleOnlineUsers);
+
+    return () => {
+      socket.emit("workspace:leave", { workspaceId });
+      socket.off("workspace:online-users", handleOnlineUsers);
+    };
+  }, [workspaceId, userProfile]);
+
   return (
     <div className="flex flex-col">
       <Navbar />
@@ -30,9 +53,9 @@ const Workspace = () => {
           <Sidebar
             activeComponent={activeComponent}
             workspaceId={workspaceId}
-            // setActiveComponent={setActiveComponent}
             workspaceName={workspaceName}
             inviteCode={inviteCode}
+            onlineUsers={onlineUsers}
           />
 
         <div className="flex-1 w-[80%] rounded-md">
