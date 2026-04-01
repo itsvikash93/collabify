@@ -3,11 +3,44 @@ import { useForm } from "react-hook-form";
 
 const TaskModal = ({ showModal, setShowModal, handleAddTask }) => {
   const { register, handleSubmit, reset } = useForm();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmitTask = (data) => {
-    handleAddTask(data);
-    reset();
-    setShowModal(false);
+  // Get date-time 30 minutes from now in local format for min attribute
+  const getMinDateTime = () => {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + 30);
+    const offset = now.getTimezoneOffset();
+    const local = new Date(now.getTime() - offset * 60000);
+    return local.toISOString().slice(0, 16);
+  };
+
+  const handleSubmitTask = async (data) => {
+    setError("");
+
+    // Validate deadline is at least 30 minutes from now
+    if (data.deadline) {
+      const selected = new Date(data.deadline);
+      const minTime = new Date();
+      minTime.setMinutes(minTime.getMinutes() + 30);
+      if (selected < minTime) {
+        setError("Deadline must be at least 30 minutes from now.");
+        return;
+      }
+    }
+
+    setLoading(true);
+    try {
+      await handleAddTask(data);
+      reset();
+      setShowModal(false);
+    } catch (err) {
+      const message =
+        err?.response?.data?.message || "Failed to add task. Please try again.";
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleOutsideClick = (e) => {
@@ -140,15 +173,27 @@ const TaskModal = ({ showModal, setShowModal, handleAddTask }) => {
                 id="deadline"
                 type="datetime-local"
                 className="w-full p-2 border border-gray-400 rounded outline-none"
+                min={getMinDateTime()}
                 {...register("deadline", { required: "Deadline is required" })}
               />
             </div>
 
+            {error && (
+              <div className="w-full px-3 py-2 bg-red-50 border border-red-200 rounded text-red-600 text-sm">
+                {error}
+              </div>
+            )}
+
             <button
               type="submit"
-              className="px-3 py-2 mt-1 bg-green-500 text-white rounded hover:bg-green-600 transition-colors duration-200 font-semibold focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              disabled={loading}
+              className="px-3 py-2 mt-1 bg-green-500 text-white rounded hover:bg-green-600 transition-colors duration-200 font-semibold focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 flex items-center gap-2"
             >
-              Create Task
+              {loading ? (
+                <i className="ri-loader-line animate-spin"></i>
+              ) : (
+                "Create Task"
+              )}
             </button>
           </form>
           <button

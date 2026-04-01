@@ -64,8 +64,8 @@ const KanbanBoard = () => {
     }
   }, [dispatch]);
 
-  const handleAddTask = (taskData) => {
-    dispatch(asyncAddTask(workspaceId, taskData));
+  const handleAddTask = async (taskData) => {
+    await dispatch(asyncAddTask(workspaceId, taskData));
   };
 
   const handleEditTask = async (taskId, updatedData) => {

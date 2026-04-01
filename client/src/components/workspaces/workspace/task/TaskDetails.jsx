@@ -11,12 +11,14 @@ const TaskDetails = ({
 }) => {
   const { profile } = useSelector((state) => state.userReducer);
   const { workspaces } = useSelector((state) => state.workspaceReducer);
-  
+
   const [showAssignDropdown, setShowAssignDropdown] = useState(false);
 
   // Authenticate Admin Context Status dynamically across local workspaces
   const currentWorkspace = workspaces.find((w) => w._id === task.workspace);
-  const isAdmin = currentWorkspace?.members?.find((m) => m.userId?._id === profile?._id)?.role === "Admin";
+  const isAdmin =
+    currentWorkspace?.members?.find((m) => m.userId?._id === profile?._id)
+      ?.role === "Admin";
 
   const handleClose = () => {
     setShowTaskDetails(false);
@@ -27,7 +29,7 @@ const TaskDetails = ({
       handleClose();
     }
   };
-  
+
   const handleDeleteClick = () => {
     setSelectedTask(task);
     setShowTaskDetails(false);
@@ -83,24 +85,27 @@ const TaskDetails = ({
             <div className="flex flex-wrap gap-2 items-center">
               <span
                 className={`px-2 py-1 rounded-full text-xs font-semibold shadow-sm ${getStatusColor(
-                  task.status
+                  task.status,
                 )}`}
               >
                 {task.status}
               </span>
               <span
                 className={`px-2 py-1 rounded-full text-xs font-semibold shadow-sm ${getPriorityColor(
-                  task.priority
+                  task.priority,
                 )}`}
               >
                 {task.priority} Priority
               </span>
-              {task.assignedTo && (
+              {task?.assignedTo && (
                 <span className="flex items-center gap-1.5 px-3 py-1 bg-gray-50 text-gray-700 rounded-full text-xs font-medium border border-gray-200 shadow-sm">
                   <div className="w-4 h-4 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-[10px]">
-                    {task.assignedTo.name ? task.assignedTo.name.charAt(0).toUpperCase() : "U"}
+                    {task.assignedTo.name
+                      ? task.assignedTo.name.charAt(0).toUpperCase()
+                      : "U"}
                   </div>
-                  Assigned to: <span className="font-bold">{task.assignedTo.name}</span>
+                  Assigned to:{" "}
+                  <span className="font-bold">{task.assignedTo.name}</span>
                 </span>
               )}
             </div>
@@ -108,42 +113,53 @@ const TaskDetails = ({
 
           <div className="flex gap-2">
             {/* Dynamic Admin-Specific Assignment Panel Wrapper */}
-            {isAdmin && currentWorkspace?.members?.length > 0 && (
-              <div className="relative">
-                <button
-                  className="bg-purple-500 hover:bg-purple-600 text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all duration-200 shadow-md hover:shadow-lg text-sm font-semibold"
-                  onClick={() => setShowAssignDropdown(!showAssignDropdown)}
-                >
-                  <i className="ri-user-add-line"></i>
-                  Assign
-                </button>
-                {showAssignDropdown && (
-                  <div className="absolute right-0 top-full mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50 overflow-hidden animate-fade-in">
-                    <div className="px-3 py-2 bg-gray-50 border-b border-gray-100 text-xs font-semibold text-gray-500 uppercase tracking-wider flex justify-between items-center">
-                      Assign To
-                      <button onClick={() => setShowAssignDropdown(false)} className="hover:text-red-500">
-                        <i className="ri-close-line text-sm"></i>
-                      </button>
-                    </div>
-                    <div className="max-h-48 overflow-y-auto">
-                      {currentWorkspace.members.map((member) => (
+            {isAdmin &&
+              task.status !== "Done" &&
+              currentWorkspace?.members?.length > 0 && (
+                <div className="relative">
+                  <button
+                    className="bg-purple-500 hover:bg-purple-600 text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all duration-200 shadow-md hover:shadow-lg text-sm font-semibold"
+                    onClick={() => setShowAssignDropdown(!showAssignDropdown)}
+                  >
+                    <i className="ri-user-add-line"></i>
+                    Assign
+                  </button>
+                  {showAssignDropdown && (
+                    <div className="absolute right-0 top-full mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50 overflow-hidden animate-fade-in">
+                      <div className="px-3 py-2 bg-gray-50 border-b border-gray-100 text-xs font-semibold text-gray-500 uppercase tracking-wider flex justify-between items-center">
+                        Assign To
                         <button
-                          key={member.userId?._id || Math.random()}
-                          onClick={() => handleAssign(member.userId?._id)}
-                          className={`w-full text-left px-4 py-2 text-sm hover:bg-purple-50 transition-colors flex items-center gap-3 border-b border-gray-50 last:border-0 ${task.assignedTo?._id === member.userId?._id ? "bg-purple-50 text-purple-700 font-medium" : "text-gray-700"}`}
+                          onClick={() => setShowAssignDropdown(false)}
+                          className="hover:text-red-500"
                         >
-                          <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 font-bold text-xs flex-shrink-0">
-                            {member.userId?.name ? member.userId.name.charAt(0).toUpperCase() : "U"}
-                          </div>
-                          <span className="truncate">{member.userId?.name || "Unknown User"}</span>
-                          {task.assignedTo?._id === member.userId?._id && <i className="ri-check-line ml-auto text-purple-600 font-bold"></i>}
+                          <i className="ri-close-line text-sm"></i>
                         </button>
-                      ))}
+                      </div>
+                      <div className="max-h-48 overflow-y-auto">
+                        {currentWorkspace.members.map((member) => (
+                          <button
+                            key={member.userId?._id || Math.random()}
+                            onClick={() => handleAssign(member.userId?._id)}
+                            className={`w-full text-left px-4 py-2 text-sm hover:bg-purple-50 transition-colors flex items-center gap-3 border-b border-gray-50 last:border-0 ${task.assignedTo?._id === member.userId?._id ? "bg-purple-50 text-purple-700 font-medium" : "text-gray-700"}`}
+                          >
+                            <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 font-bold text-xs flex-shrink-0">
+                              {member.userId?.name
+                                ? member.userId.name.charAt(0).toUpperCase()
+                                : "U"}
+                            </div>
+                            <span className="truncate">
+                              {member.userId?.name || "Unknown User"}
+                            </span>
+                            {task.assignedTo?._id === member.userId?._id && (
+                              <i className="ri-check-line ml-auto text-purple-600 font-bold"></i>
+                            )}
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            )}
+                  )}
+                </div>
+              )}
 
             <button
               className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all duration-200 shadow-md hover:shadow-lg text-sm font-semibold"
@@ -203,7 +219,7 @@ const TaskDetails = ({
                 })}
               </p>
             </div>
-            
+
             {task.deadline && (
               <div className="bg-red-50 p-4 rounded-xl border border-red-100 transition-colors shadow-sm col-span-2">
                 <h2 className="text-lg font-semibold text-red-800 mb-1 flex items-center gap-2">
@@ -218,7 +234,6 @@ const TaskDetails = ({
                 </p>
               </div>
             )}
-            
           </div>
         </div>
 

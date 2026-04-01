@@ -16,16 +16,16 @@ export const asyncGetTasks = (workspaceId) => (dispatch) => {
   }
 };
 
-export const asyncAddTask = (workspaceId, task) => (dispatch) => {
+export const asyncAddTask = (workspaceId, task) => async (dispatch) => {
   try {
-    console.log(task, workspaceId);
-    axios.post(`/workspaces/${workspaceId}/tasks`, task).then((res) => {
-      dispatch(addTask(res.data));
-      toast.success("Task added successfully");
-    });
+    const res = await axios.post(`/workspaces/${workspaceId}/tasks`, task);
+    dispatch(addTask(res.data));
+    toast.success("Task added successfully");
   } catch (error) {
     console.log(error);
-    toast.error("Failed to add task");
+    const message = error.response?.data?.message || "Failed to add task";
+    toast.error(message);
+    throw error;
   }
 };
 

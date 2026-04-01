@@ -12,6 +12,7 @@ import {
   asyncDeleteWorkspace,
   asyncUpdateWorkspace,
 } from "../../store/actions/WorkspaceActions";
+import { asyncGetUserProfile } from "../../store/actions/UserActions";
 import { toast } from "react-toastify";
 import DeleteConfirmation from "./delete/DeleteConfirmation";
 
@@ -23,6 +24,19 @@ const Workspaces = () => {
   const [deleteDetails, setDeleteDetails] = useState(null); // Tracks the workspace to be deleted
   const dispatch = useDispatch();
   const { workspaces } = useSelector((state) => state.workspaceReducer);
+  const { profile } = useSelector((state) => state.userReducer);
+
+  useEffect(() => {
+    if (!profile) {
+      dispatch(asyncGetUserProfile());
+    }
+  }, [dispatch, profile]);
+
+  const isAdminOfWorkspace = (workspace) => {
+    return workspace.members?.some(
+      (m) => m.userId?._id === profile?._id && m.role === "Admin",
+    );
+  };
 
   const getWorkspaces = useCallback(async () => {
     try {
@@ -45,17 +59,22 @@ const Workspaces = () => {
     [dispatch],
   );
 
-  const handleJoinWorkspace = useCallback(async (inviteCode) => {
-    try {
-      await axios.post(`/workspaces/join/${inviteCode}`);
-      toast.success("Successfully joined the workspace!");
-      setShowJoinModal(false);
-      getWorkspaces(); // refresh list
-    } catch (error) {
-      console.error(error);
-      toast.error(error.response?.data?.message || "Failed to join workspace.");
-    }
-  }, [getWorkspaces]);
+  const handleJoinWorkspace = useCallback(
+    async (inviteCode) => {
+      try {
+        await axios.post(`/workspaces/join/${inviteCode}`);
+        toast.success("Successfully joined the workspace!");
+        setShowJoinModal(false);
+        getWorkspaces(); // refresh list
+      } catch (error) {
+        console.error(error);
+        toast.error(
+          error.response?.data?.message || "Failed to join workspace.",
+        );
+      }
+    },
+    [getWorkspaces],
+  );
 
   const handleUpdate = useCallback(
     async (workspaceId, updatedData) => {
@@ -67,7 +86,7 @@ const Workspaces = () => {
         console.error("Failed to update workspace:", error);
       }
     },
-    [dispatch]
+    [dispatch],
   );
 
   const handleDeleteWorkspace = useCallback(
@@ -133,28 +152,30 @@ const Workspaces = () => {
                     <h3 className="text-xl font-bold text-[#191D23]">
                       {workspace.name}
                     </h3>
-                    <div className="flex gap-2 items-center">
-                      <button
-                        onClick={() => {
-                          setWorkspaceToEdit(workspace);
-                          setShowEditModal(true);
-                        }}
-                        className="text-blue-700 hover:text-blue-800"
-                      >
-                        <i className="ri-pencil-line text-xl"></i>
-                      </button>
-                      <button
-                        onClick={() =>
-                          setDeleteDetails({
-                            id: workspace._id,
-                            name: workspace.name,
-                          })
-                        }
-                        className="text-red-700 hover:text-red-800"
-                      >
-                        <i className="ri-delete-bin-line text-xl"></i>
-                      </button>
-                    </div>
+                    {isAdminOfWorkspace(workspace) && (
+                      <div className="flex gap-2 items-center">
+                        <button
+                          onClick={() => {
+                            setWorkspaceToEdit(workspace);
+                            setShowEditModal(true);
+                          }}
+                          className="text-blue-700 hover:text-blue-800"
+                        >
+                          <i className="ri-pencil-line text-xl"></i>
+                        </button>
+                        <button
+                          onClick={() =>
+                            setDeleteDetails({
+                              id: workspace._id,
+                              name: workspace.name,
+                            })
+                          }
+                          className="text-red-700 hover:text-red-800"
+                        >
+                          <i className="ri-delete-bin-line text-xl"></i>
+                        </button>
+                      </div>
+                    )}
                   </div>
                   <p className="text-[#191D23] mb-6 line-clamp-2">
                     {workspace.description}
@@ -173,7 +194,10 @@ const Workspaces = () => {
                     </span>
                     <Link
                       to={`/workspaces/${workspace._id}`}
-                      state={{ name: workspace.name, inviteCode: workspace.inviteCode }}
+                      state={{
+                        name: workspace.name,
+                        inviteCode: workspace.inviteCode,
+                      }}
                       className="inline-flex items-center px-4 py-2 bg-[#b1e6e0] rounded-lg"
                     >
                       Open
