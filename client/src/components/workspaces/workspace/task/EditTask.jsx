@@ -34,26 +34,26 @@ const EditTask = ({ showModal, setShowModal, handleEditTask, task }) => {
   return (
     showModal && (
       <div
-        className="fixed z-[999] inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50 modal-overlay"
+        className="fixed z-[999] inset-0 flex justify-center items-center bg-[#8c8b8b] bg-opacity-60 backdrop-blur-sm modal-overlay"
         onClick={handleOutsideClick}
       >
-        <div className="bg-white px-6 py-4 rounded shadow-lg max-w-md w-full relative">
-          <h2 className="text-xl font-semibold mb-2">Edit Task</h2>
+        <div className="bg-[#eef7f6] px-6 py-6 rounded-xl shadow-lg max-w-md w-full relative">
+          <h2 className="text-xl font-bold text-[#191D23] mb-4 border-b border-gray-300 pb-2">Edit Task</h2>
           <form
             onSubmit={handleSubmit(handleSubmitTask)}
-            className="flex flex-col gap-2 items-end justify-center"
+            className="flex flex-col gap-4"
           >
             <div className="w-full">
               <label
                 htmlFor="title"
-                className="block text-gray-700 text-sm font-semibold mb-2"
+                className="block text-sm font-semibold text-[#191D23] mb-1"
               >
                 Task Name
               </label>
               <input
                 id="title"
                 type="text"
-                className="w-full p-2 border border-gray-400 rounded outline-none"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#7dcfb4]"
                 placeholder="Enter task name"
                 {...register("title")}
                 required
@@ -69,7 +69,7 @@ const EditTask = ({ showModal, setShowModal, handleEditTask, task }) => {
               </label>
               <textarea
                 id="description"
-                className="w-full h-20 p-2 border border-gray-400 rounded outline-none resize-none"
+                className="w-full h-20 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#7dcfb4] resize-none"
                 placeholder="Enter task description"
                 {...register("description")}
                 required
@@ -152,17 +152,17 @@ const EditTask = ({ showModal, setShowModal, handleEditTask, task }) => {
 
             <button
               type="submit"
-              className="px-3 py-2 mt-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="w-full mt-2 bg-[#7dcfb4] text-white py-2 rounded-md font-semibold hover:bg-[#6cba9f] transition-colors flex justify-center items-center"
             >
               Update Task
             </button>
           </form>
           <button
             onClick={() => setShowModal(false)}
-            className="absolute top-2 right-2 p-2 text-gray-500 hover:text-zinc-700 "
+            className="absolute top-4 right-4 text-[#191D23] hover:text-red-500 transition-colors"
             aria-label="Close modal"
           >
-            <span className="text-2xl">&times;</span>
+            <span className="text-3xl leading-none">&times;</span>
           </button>
         </div>
       </div>

@@ -11,14 +11,14 @@ const DeleteConfirmation = ({ itemName, itemId, onDelete, onCancel }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white p-6 rounded-lg shadow-xl text-center">
-        <h2 className="text-xl font-semibold mb-4 text-red-600">
+    <div className="fixed inset-0 bg-[#8c8b8b] bg-opacity-60 backdrop-blur-sm flex justify-center items-center z-50">
+      <div className="bg-[#eef7f6] px-6 py-6 rounded-xl shadow-lg max-w-md w-full text-center">
+        <h2 className="text-xl font-bold text-red-500 mb-4 border-b border-gray-300 pb-2">
           Delete "{itemName}"?
         </h2>
-        <p className="text-gray-700 mb-4">
+        <p className="text-[#191D23] text-sm mb-4">
           To confirm, please enter the name of the{" "}
-          <span className="font-bold">{itemName}</span>.
+          <span className="text-red-500 font-bold">{itemName}</span>.
         </p>
         <input
           type="text"
@@ -28,20 +28,20 @@ const DeleteConfirmation = ({ itemName, itemId, onDelete, onCancel }) => {
             setInputValue(e.target.value);
             setError("");
           }}
-          className="w-full border border-gray-300 rounded-lg p-2 mb-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="w-full border border-gray-300 rounded-md px-3 py-2 mb-2 focus:outline-none focus:ring-1 focus:ring-[#7dcfb4]"
         />
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-        <div className="flex justify-center gap-4">
+        <div className="flex gap-4 mt-2">
           <button
-            className="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300"
+            className="flex-1 bg-[#69b098] text-white py-2 rounded-md font-semibold hover:bg-[#6cba9f] transition-colors"
             onClick={onCancel}
           >
             Cancel
           </button>
           <button
-            className={`py-2 px-4 rounded-lg ${
+            className={`flex-1 py-2 rounded-md font-semibold transition-colors ${
               inputValue === itemName
-                ? "bg-red-600 text-white hover:bg-red-700"
+                ? "bg-red-500 text-white hover:bg-red-600"
                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
             }`}
             onClick={handleDelete}

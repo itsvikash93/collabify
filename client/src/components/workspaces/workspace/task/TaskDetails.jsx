@@ -75,11 +75,11 @@ const TaskDetails = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex justify-center items-center modal-overlay z-[900]">
-      <div className="w-1/2 bg-white rounded-xl shadow-2xl p-6 max-h-[80vh] overflow-y-auto transform transition-all relative">
-        <div className="flex justify-between items-start mb-6 border-b pb-4">
+    <div className="fixed inset-0 bg-[#8c8b8b] bg-opacity-60 backdrop-blur-sm flex justify-center items-center modal-overlay z-[900]">
+      <div className="w-1/2 bg-[#eef7f6] rounded-xl shadow-lg p-6 max-h-[80vh] overflow-y-auto transform transition-all relative">
+        <div className="flex justify-between items-start mb-6 border-b border-gray-300 pb-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800 mb-3">
+            <h1 className="text-2xl font-bold text-[#191D23] mb-3">
               {task.title}
             </h1>
             <div className="flex flex-wrap gap-2 items-center">
@@ -98,8 +98,8 @@ const TaskDetails = ({
                 {task.priority} Priority
               </span>
               {task?.assignedTo && (
-                <span className="flex items-center gap-1.5 px-3 py-1 bg-gray-50 text-gray-700 rounded-full text-xs font-medium border border-gray-200 shadow-sm">
-                  <div className="w-4 h-4 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-[10px]">
+                <span className="flex items-center gap-1.5 px-3 py-1 bg-white text-[#191D23] rounded-full text-xs font-medium border border-[#c5e9e4] shadow-sm">
+                  <div className="w-4 h-4 rounded-full bg-[#d4f1eb] text-[#2bb4a4] flex items-center justify-center font-bold text-[10px]">
                     {task.assignedTo.name
                       ? task.assignedTo.name.charAt(0).toUpperCase()
                       : "U"}
@@ -111,22 +111,22 @@ const TaskDetails = ({
             </div>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-start pr-8">
             {/* Dynamic Admin-Specific Assignment Panel Wrapper */}
             {isAdmin &&
               task.status !== "Done" &&
               currentWorkspace?.members?.length > 0 && (
                 <div className="relative">
                   <button
-                    className="bg-purple-500 hover:bg-purple-600 text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all duration-200 shadow-md hover:shadow-lg text-sm font-semibold"
+                    className="bg-[#73c1a7] hover:bg-[#6cba9f] text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all duration-200 shadow-md hover:shadow-lg text-sm font-semibold"
                     onClick={() => setShowAssignDropdown(!showAssignDropdown)}
                   >
                     <i className="ri-user-add-line"></i>
                     Assign
                   </button>
                   {showAssignDropdown && (
-                    <div className="absolute right-0 top-full mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50 overflow-hidden animate-fade-in">
-                      <div className="px-3 py-2 bg-gray-50 border-b border-gray-100 text-xs font-semibold text-gray-500 uppercase tracking-wider flex justify-between items-center">
+                    <div className="absolute right-0 top-full mt-2 w-56 bg-white border border-[#c5e9e4] rounded-xl shadow-lg z-50 overflow-hidden">
+                      <div className="px-3 py-2 bg-[#d2ece9] border-b border-[#c5e9e4] text-xs font-semibold text-[#191D23] uppercase tracking-wider flex justify-between items-center">
                         Assign To
                         <button
                           onClick={() => setShowAssignDropdown(false)}
@@ -140,9 +140,9 @@ const TaskDetails = ({
                           <button
                             key={member.userId?._id || Math.random()}
                             onClick={() => handleAssign(member.userId?._id)}
-                            className={`w-full text-left px-4 py-2 text-sm hover:bg-purple-50 transition-colors flex items-center gap-3 border-b border-gray-50 last:border-0 ${task.assignedTo?._id === member.userId?._id ? "bg-purple-50 text-purple-700 font-medium" : "text-gray-700"}`}
+                            className={`w-full text-left px-4 py-2 text-sm hover:bg-[#eef7f6] transition-colors flex items-center gap-3 border-b border-gray-50 last:border-0 ${task.assignedTo?._id === member.userId?._id ? "bg-[#eef7f6] text-[#2bb4a4] font-medium" : "text-[#191D23]"}`}
                           >
-                            <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 font-bold text-xs flex-shrink-0">
+                            <div className="w-6 h-6 rounded-full bg-[#d4f1eb] flex items-center justify-center text-[#2bb4a4] font-bold text-xs flex-shrink-0">
                               {member.userId?.name
                                 ? member.userId.name.charAt(0).toUpperCase()
                                 : "U"}
@@ -151,7 +151,7 @@ const TaskDetails = ({
                               {member.userId?.name || "Unknown User"}
                             </span>
                             {task.assignedTo?._id === member.userId?._id && (
-                              <i className="ri-check-line ml-auto text-purple-600 font-bold"></i>
+                              <i className="ri-check-line ml-auto text-[#2bb4a4] font-bold"></i>
                             )}
                           </button>
                         ))}
@@ -162,7 +162,7 @@ const TaskDetails = ({
               )}
 
             <button
-              className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all duration-200 shadow-md hover:shadow-lg text-sm font-semibold"
+              className="bg-[#3779dc] hover:bg-[#3b74ca] text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all duration-200 shadow-md hover:shadow-lg text-sm font-semibold"
               onClick={() => {
                 setShowTaskDetails(false);
                 setSelectedTask(task);
@@ -183,23 +183,23 @@ const TaskDetails = ({
         </div>
 
         <div className="space-y-4">
-          <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 hover:border-gray-200 transition-colors shadow-sm">
-            <h2 className="text-lg font-semibold text-gray-800 mb-2 flex items-center gap-2">
+          <div className="bg-white p-4 rounded-xl border border-[#c5e9e4] hover:border-[#7dcfb4] transition-colors shadow-sm">
+            <h2 className="text-lg font-semibold text-[#191D23] mb-2 flex items-center gap-2">
               <i className="ri-file-text-line text-[#33d1bf]"></i>
               Description
             </h2>
-            <p className="text-gray-700 leading-relaxed text-sm whitespace-pre-wrap">
+            <p className="text-[#191D23] leading-relaxed text-sm whitespace-pre-wrap">
               {task.description}
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 hover:border-gray-200 transition-colors shadow-sm">
-              <h2 className="text-lg font-semibold text-gray-800 mb-2 flex items-center gap-2">
+            <div className="bg-white p-4 rounded-xl border border-[#c5e9e4] hover:border-[#7dcfb4] transition-colors shadow-sm">
+              <h2 className="text-lg font-semibold text-[#191D23] mb-2 flex items-center gap-2">
                 <i className="ri-calendar-line text-[#33d1bf]"></i>
                 Created
               </h2>
-              <p className="text-gray-700 text-sm font-medium tracking-wide">
+              <p className="text-[#191D23] text-sm font-medium tracking-wide">
                 {new Date(task.createdAt).toLocaleString(undefined, {
                   dateStyle: "medium",
                   timeStyle: "short",
@@ -207,12 +207,12 @@ const TaskDetails = ({
               </p>
             </div>
 
-            <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 hover:border-gray-200 transition-colors shadow-sm">
-              <h2 className="text-lg font-semibold text-gray-800 mb-2 flex items-center gap-2">
+            <div className="bg-white p-4 rounded-xl border border-[#c5e9e4] hover:border-[#7dcfb4] transition-colors shadow-sm">
+              <h2 className="text-lg font-semibold text-[#191D23] mb-2 flex items-center gap-2">
                 <i className="ri-time-line text-[#33d1bf]"></i>
                 Last Updated
               </h2>
-              <p className="text-gray-700 text-sm font-medium tracking-wide">
+              <p className="text-[#191D23] text-sm font-medium tracking-wide">
                 {new Date(task.updatedAt).toLocaleString(undefined, {
                   dateStyle: "medium",
                   timeStyle: "short",
@@ -239,9 +239,9 @@ const TaskDetails = ({
 
         <button
           onClick={handleClose}
-          className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition-colors bg-gray-100 hover:bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center outline-none"
+          className="absolute top-6 right-4 bg-white h-8 w-8 rounded-full text-[#191D23] hover:text-red-500 transition-colors"
         >
-          <i className="ri-close-line text-xl"></i>
+          <span className="text-[2vw] leading-[0.7] ">&times;</span>
         </button>
       </div>
     </div>
