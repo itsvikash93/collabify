@@ -30,7 +30,9 @@ module.exports.signupController = async (req, res) => {
     });
     res.status(201).json({ message: "User created successfully", token });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 };
 
@@ -54,7 +56,9 @@ module.exports.loginController = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     res.status(200).json({ message: "Login successful", token });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 };
 
@@ -65,13 +69,15 @@ module.exports.logoutController = async (req, res) => {
     await blacklistTokenModel.create({ token });
     res.status(200).json({ message: "Logout successful" });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 };
 
 module.exports.googleCallbackController = async (req, res) => {
   const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET);
   console.log(token);
-  
+
   res.redirect(`http://localhost:5173/?token=${token}`);
 };
