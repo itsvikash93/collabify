@@ -1,8 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "https://collabify-h1gc.onrender.com/api",
-  // baseURL: "http://localhost:3000/api",
+  baseURL: import.meta.env.VITE_API_URI,
 });
 
 instance.interceptors.request.use(
@@ -14,6 +13,20 @@ instance.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  },
+);
+
+instance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // Remove invalid token
+      localStorage.removeItem("collabifyToken");
+
+      // Redirect to login
+      window.location.href = "/login";
+    }
     return Promise.reject(error);
   },
 );
